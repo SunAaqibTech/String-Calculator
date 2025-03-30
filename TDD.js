@@ -72,7 +72,7 @@ function Add(numbers) {
     return sum;
 }
 
-// --- Test Cases for Steps 1 through 8 ---
+// --- Test Cases for Steps 1 through 9 ---
 console.log(`Step 1-3 Tests:`);
 console.log(`Add("") -> Expected: 0, Got: ${Add("")}`);
 console.log(`Add("1") -> Expected: 1, Got: ${Add("1")}`);
@@ -129,6 +129,12 @@ console.log(`\nStep 8 Tests:`);
 console.log(`Add("//[*][%]\\n1*2%3") -> Expected: 6, Got: ${Add("//[*][%]\n1*2%3")}`);
 console.log(`Add("//[+][;]\\n1+2;3") -> Expected: 6, Got: ${Add("//[+][;]\n1+2;3")}`);
 console.log(`Add("//[aa][bb]\\n1aa2bb3") -> Expected: 6, Got: ${Add("//[aa][bb]\n1aa2bb3")}`);
-console.log(`Add("//[.]\\n1.2,3") -> Expected: NaN, Got: ${Add("//[.]\n1.2,3")}`); // Should split by '.'
+console.log(`Add("//[.]\\n1.2,3") -> Expected: NaN, Got: ${Add("//[.]\n1.2,3")}`);
 console.log(`Add("//[,][\\n]\\n1,2\\n3") -> Expected: 6, Got: ${Add("//[,][\n]\\n1,2\n3")}`);
 console.log(`Add("//[***][%%]\\n1***2%%3") -> Expected: 6, Got: ${Add("//[***][%%]\n1***2%%3")}`);
+
+console.log(`\nStep 9 Tests:`);
+console.log(`Add("//[**][%%]\\n1**2%%3") -> Expected: 6, Got: ${Add("//[**][%%]\n1**2%%3")}`);
+console.log(`Add("//[---][@@@]\\n1---2@@@3") -> Expected: 6, Got: ${Add("//[---][@@@]\n1---2@@@3")}`);
+console.log(`Add("//[longdelim1][longdelim2]\\n1longdelim12longdelim23") -> Expected: 6, Got: ${Add("//[longdelim1][longdelim2]\n1longdelim12longdelim23")}`);
+console.log(`Add("//[...][;;;]\\n1...2;;;3,4\\n5") -> Expected: 15, Got: ${Add("//[...][;;;]\n1...2;;;3,4\n5")}`);
