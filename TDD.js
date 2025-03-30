@@ -21,7 +21,15 @@ function Add(numbers) {
     let delimiterRegex = /,|\n/;
     let numbersPart = numbers;
 
-    if (numbers.startsWith("//")) {
+    if (numbers.startsWith("//[")) {
+        const closingBracketIndex = numbers.indexOf(']\n');
+        if (closingBracketIndex !== -1) {
+            const customDelimiter = numbers.substring(3, closingBracketIndex);
+            numbersPart = numbers.substring(closingBracketIndex + 2);
+            const escapedDelimiter = escapeRegex(customDelimiter);
+            delimiterRegex = new RegExp(escapedDelimiter);
+        }
+    } else if (numbers.startsWith("//")) {
         const newlineIndex = numbers.indexOf('\n');
         if (newlineIndex !== -1) {
             const customDelimiter = numbers.substring(2, newlineIndex);
@@ -59,7 +67,7 @@ function Add(numbers) {
     return sum;
 }
 
-// --- Test Cases for Steps 1 through 6 ---
+// --- Test Cases for Steps 1 through 7 ---
 console.log(`Step 1-3 Tests:`);
 console.log(`Add("") -> Expected: 0, Got: ${Add("")}`);
 console.log(`Add("1") -> Expected: 1, Got: ${Add("1")}`);
@@ -104,3 +112,10 @@ console.log(`Add("2,1000") -> Expected: 1002, Got: ${Add("2,1000")}`);
 console.log(`Add("1000,2") -> Expected: 1002, Got: ${Add("1000,2")}`);
 console.log(`Add("1001,1002,3") -> Expected: 3, Got: ${Add("1001,1002,3")}`);
 console.log(`Add("//;\\n2;1001") -> Expected: 2, Got: ${Add("//;\n2;1001")}`);
+
+console.log(`\nStep 7 Tests:`);
+console.log(`Add("//[***]\\n1***2***3") -> Expected: 6, Got: ${Add("//[***]\n1***2***3")}`);
+console.log(`Add("//[--]\\n1--2--3") -> Expected: 6, Got: ${Add("//[--]\n1--2--3")}`);
+console.log(`Add("//[abc]\\n1abc2abc3") -> Expected: 6, Got: ${Add("//[abc]\n1abc2abc3")}`);
+console.log(`Add("//[.]\\n1.2.3") -> Expected: 6, Got: ${Add("//[.]\n1.2.3")}`);
+console.log(`Add("//[[[]]\\n1[[[]2[[[]3") -> Expected: 6, Got: ${Add("//[[[]]\n1[[[]2[[[]3")}`);
