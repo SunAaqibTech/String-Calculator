@@ -47,7 +47,7 @@ function Add(numbers) {
         const num = parseInt(numStr, 10);
         if (num < 0) {
             negativeNumbers.push(num);
-        } else {
+        } else if (num <= 1000) {
             sum += num;
         }
     }
@@ -59,7 +59,7 @@ function Add(numbers) {
     return sum;
 }
 
-// --- Test Cases for Steps 1 through 5 ---
+// --- Test Cases for Steps 1 through 6 ---
 console.log(`Step 1-3 Tests:`);
 console.log(`Add("") -> Expected: 0, Got: ${Add("")}`);
 console.log(`Add("1") -> Expected: 1, Got: ${Add("1")}`);
@@ -67,6 +67,7 @@ console.log(`Add("1,2") -> Expected: 3, Got: ${Add("1,2")}`);
 console.log(`Add("1,2,3,4,5") -> Expected: 15, Got: ${Add("1,2,3,4,5")}`);
 console.log(`Add("1\\n2,3") -> Expected: 6, Got: ${Add("1\n2,3")}`);
 
+console.log(`\nStep 4 Tests:`);
 console.log(`Add("//;\\n1;2") -> Expected: 3, Got: ${Add("//;\n1;2")}`);
 console.log(`Add("//*\\n1*2*3") -> Expected: 6, Got: ${Add("//*\n1*2*3")}`);
 console.log(`Add("//sep\\n1sep2sep3") -> Expected: 6, Got: ${Add("//sep\n1sep2sep3")}`);
@@ -95,3 +96,11 @@ try {
 }
 
 console.log(`Add("1,2,3") -> Expected: 6, Got: ${Add("1,2,3")}`);
+
+console.log(`\nStep 6 Tests:`);
+console.log(`Add("2,1001") -> Expected: 2, Got: ${Add("2,1001")}`);
+console.log(`Add("1001,2") -> Expected: 2, Got: ${Add("1001,2")}`);
+console.log(`Add("2,1000") -> Expected: 1002, Got: ${Add("2,1000")}`);
+console.log(`Add("1000,2") -> Expected: 1002, Got: ${Add("1000,2")}`);
+console.log(`Add("1001,1002,3") -> Expected: 3, Got: ${Add("1001,1002,3")}`);
+console.log(`Add("//;\\n2;1001") -> Expected: 2, Got: ${Add("//;\n2;1001")}`);
