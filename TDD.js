@@ -21,21 +21,26 @@ function Add(numbers) {
     let delimiterRegex = /,|\n/;
     let numbersPart = numbers;
 
-    if (numbers.startsWith("//[")) {
-        const closingBracketIndex = numbers.indexOf(']\n');
-        if (closingBracketIndex !== -1) {
-            const customDelimiter = numbers.substring(3, closingBracketIndex);
-            numbersPart = numbers.substring(closingBracketIndex + 2);
-            const escapedDelimiter = escapeRegex(customDelimiter);
-            delimiterRegex = new RegExp(escapedDelimiter);
-        }
-    } else if (numbers.startsWith("//")) {
+    if (numbers.startsWith("//")) {
         const newlineIndex = numbers.indexOf('\n');
         if (newlineIndex !== -1) {
-            const customDelimiter = numbers.substring(2, newlineIndex);
+            const delimiterSection = numbers.substring(2, newlineIndex);
             numbersPart = numbers.substring(newlineIndex + 1);
-            const escapedDelimiter = escapeRegex(customDelimiter);
-            delimiterRegex = new RegExp(escapedDelimiter);
+            const customDelimiters = [];
+            const delimiterMatch = delimiterSection.matchAll(/\[([^\]]+)\]/g);
+            for (const match of delimiterMatch) {
+                customDelimiters.push(escapeRegex(match[1]));
+            }
+
+            if (customDelimiters.length > 0) {
+                delimiterRegex = new RegExp(customDelimiters.join('|'));
+            } else {
+                // Handle single character custom delimiter (without brackets) - for backward compatibility
+                const singleCharDelimiter = delimiterSection;
+                if (singleCharDelimiter) {
+                    delimiterRegex = new RegExp(escapeRegex(singleCharDelimiter));
+                }
+            }
         }
     }
 
@@ -67,7 +72,7 @@ function Add(numbers) {
     return sum;
 }
 
-// --- Test Cases for Steps 1 through 7 ---
+// --- Test Cases for Steps 1 through 8 ---
 console.log(`Step 1-3 Tests:`);
 console.log(`Add("") -> Expected: 0, Got: ${Add("")}`);
 console.log(`Add("1") -> Expected: 1, Got: ${Add("1")}`);
@@ -119,3 +124,11 @@ console.log(`Add("//[--]\\n1--2--3") -> Expected: 6, Got: ${Add("//[--]\n1--2--3
 console.log(`Add("//[abc]\\n1abc2abc3") -> Expected: 6, Got: ${Add("//[abc]\n1abc2abc3")}`);
 console.log(`Add("//[.]\\n1.2.3") -> Expected: 6, Got: ${Add("//[.]\n1.2.3")}`);
 console.log(`Add("//[[[]]\\n1[[[]2[[[]3") -> Expected: 6, Got: ${Add("//[[[]]\n1[[[]2[[[]3")}`);
+
+console.log(`\nStep 8 Tests:`);
+console.log(`Add("//[*][%]\\n1*2%3") -> Expected: 6, Got: ${Add("//[*][%]\n1*2%3")}`);
+console.log(`Add("//[+][;]\\n1+2;3") -> Expected: 6, Got: ${Add("//[+][;]\n1+2;3")}`);
+console.log(`Add("//[aa][bb]\\n1aa2bb3") -> Expected: 6, Got: ${Add("//[aa][bb]\n1aa2bb3")}`);
+console.log(`Add("//[.]\\n1.2,3") -> Expected: NaN, Got: ${Add("//[.]\n1.2,3")}`); // Should split by '.'
+console.log(`Add("//[,][\\n]\\n1,2\\n3") -> Expected: 6, Got: ${Add("//[,][\n]\\n1,2\n3")}`);
+console.log(`Add("//[***][%%]\\n1***2%%3") -> Expected: 6, Got: ${Add("//[***][%%]\n1***2%%3")}`);
